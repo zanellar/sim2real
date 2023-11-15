@@ -1,6 +1,6 @@
-from sim2real.plot.plot import Plotter
+from sim2real.plot.plotter import Plotter
 
-log_file = "2023-11-15-14-08-53.json" # TODO
+log_file = "test.json" # TODO
 
 plotter = Plotter()
 plotter.load_data(log_file)

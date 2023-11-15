@@ -23,4 +23,6 @@ class MujocoBridge(BaseBridge):
             return self.sim.get_joints_pos()
         if id == "joint_vel":
             return self.sim.get_joints_vel() 
+        if id == "joint_torque":
+            return self.sim.get_joints_ft()
     
