@@ -13,7 +13,7 @@ import os
 import time
 import json
 
-config_file_name = "config_mujoco"  # TODO: choose config file name
+config_file_name = "config_mujoco_panda"  # TODO: choose config file name
 
 ##############################################################################
 ##############################################################################
@@ -33,15 +33,46 @@ log_file = os.path.join(PkgPath.LOGS, file_name)
 # create controller
 controller = RobotController(config)
 
-for t in range(config["max_episode_length"]):
+action = controller.measure("joint_pos")[0:8] 
+
+for t in range(controller.config["max_episode_length"]//2):
 
     # send constant action
-    action = np.zeros(6)
+    action += 0.0001*np.ones(len(action))
     controller.execute(action)
 
     # measure end-effector position
     eef_pos = controller.measure("eef_pos") 
-    print(eef_pos)
+
+    print("@@@@@@@@@@@@@@@@")
+    print("t", t)
+    print("eef_pos", eef_pos)
+    print("action", action)
+    print("joint_pos", controller.measure("joint_pos"))
+
+    # save to file 
+    data = {
+        "eef_pos": eef_pos.tolist(),
+        "action": action.tolist(),
+    }
+    with open(log_file, "a") as f:
+        json.dump(data, f)
+        f.write("\n")
+
+for t in range(controller.config["max_episode_length"]//2):
+
+    # send constant action
+    action -= 0.0001*np.ones(len(action))
+    controller.execute(action)
+
+    # measure end-effector position
+    eef_pos = controller.measure("eef_pos") 
+
+    print("@@@@@@@@@@@@@@@@")
+    print("t", t)
+    print("eef_pos", eef_pos)
+    print("action", action)
+    print("joint_pos", controller.measure("joint_pos"))
 
     # save to file 
     data = {

@@ -13,12 +13,12 @@ class MujocoBridge(BaseBridge):
         )
 
     def execute(self, action):
-        self.sim.render()
         self.sim.execute(action) 
+        self.sim.render()
     
     def measure(self, id): 
         if id == "eef_pos":
-            return self.sim.get_obj_pos("end_effector")   
+            return self.sim.get_obj_pos("end_effector")
         if id == "joint_pos":
             return self.sim.get_joints_pos()
         if id == "joint_vel":

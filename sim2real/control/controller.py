@@ -5,8 +5,16 @@ from sim2real.bridges.rosbridge import RosBridge
 
 class RobotController:
     def __init__(self, config):
-        self.config = config   
-        self.setbridge(config["bridge"])
+        if type(config) == str:
+            import json
+            with open(config, "r") as f:
+                self.config = json.load(f)
+        elif type(config) == dict:
+            self.config = config 
+        else:
+            raise Exception("Config must be either a path to a json file or a dictionary")
+        
+        self.setbridge(self.config["bridge"])
  
     def setbridge(self, bridge):
         '''
@@ -16,11 +24,11 @@ class RobotController:
         - "ros" for using the real robot by means of ROS
         '''
         if bridge == "mujoco":
-            self.bridge = MujocoBridge(self.config["env"], self.config["robot"], **self.config["bridge_config"])
+            self.bridge = MujocoBridge(self.config)
         elif bridge == "isaac":
-            self.bridge = IsaacBridge(self.config["env"], self.config["robot"], **self.config["bridge_config"])
+            self.bridge = IsaacBridge(self.config)
         elif bridge == "ros":
-            self.bridge = RosBridge(self.config["env"], self.config["robot"], **self.config["bridge_config"])
+            self.bridge = RosBridge(self.config)
         else:
             raise Exception("Bridge not supported")
 
