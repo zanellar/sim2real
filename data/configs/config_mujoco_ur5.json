@@ -1,0 +1,7 @@
+
+{
+    "bridge": "mujoco",
+    "env": "ur5_position",
+    "init_joint_config": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+    "max_episode_length": 5000
+}
